@@ -39,12 +39,12 @@ def process_docs(dataset: datasets.Dataset) -> datasets.Dataset:
 
 # POST-PROCESSING
 
-def process_results_mcq(doc, results, true_labels):
+def process_results_mcq(doc, results, true_choices):
     results = [result[0] for result in results]
 
-    acc = 1.0 if int(np.argmax(results)) in true_labels else 0.0
+    acc = 1.0 if int(np.argmax(results)) in true_choices else 0.0
     completion_len = np.array([float(len(i)) for i in doc["choices"]])
-    acc_norm = 1.0 if int(np.argmax(results / completion_len)) in true_labels else 0.0
+    acc_norm = 1.0 if int(np.argmax(results / completion_len)) in true_choices else 0.0
 
     return {
         "acc": acc,
@@ -67,6 +67,12 @@ def _get_positive_choices_by_label(label: Label) -> list[int]:
     if len(result) == 0:
         raise ValueError(f"There are no choices assuming positive `label={label.name}`")
     return result
+
+def _get_negative_choices_by_label(label: Label) -> list[int]:
+    all_labels = list(range(len(_CHOICES)))
+    positive_labels = _get_positive_choices_by_label(label)
+    return [x for x in all_labels if x not in positive_labels]
+
 
 def _labels_to_choice(label_list: list[Label]) -> int:
     label_list = label_list
@@ -91,13 +97,25 @@ def evaluate_multilabel(doc, results):
     return process_results_mcq(doc, results, [choice_index])
 
 def evaluate_reduction_label(doc, results):
-    positive_choices = _get_positive_choices_by_label(Label.REDUCTION)
-    return process_results_mcq(doc, results, positive_choices)
+    true_choices = None
+    if doc["annotation_Reduction"]:
+        true_choices = _get_positive_choices_by_label(Label.REDUCTION)
+    else:
+        true_choices = _get_negative_choices_by_label(Label.REDUCTION)
+    return process_results_mcq(doc, results, true_choices)
 
 def evaluate_nz_label(doc, results):
-    positive_choices = _get_positive_choices_by_label(Label.NET_ZERO)
-    return process_results_mcq(doc, results, positive_choices)
+    true_choices = None
+    if doc["annotation_NZT"]:
+        true_choices = _get_positive_choices_by_label(Label.NET_ZERO)
+    else:
+        true_choices = _get_negative_choices_by_label(Label.NET_ZERO)
+    return process_results_mcq(doc, results, true_choices)
 
 def evaluate_other_label(doc, results):
-    positive_choices = _get_positive_choices_by_label(Label.OTHER)
-    return process_results_mcq(doc, results, positive_choices)
+    true_choices = None
+    if doc["annotation_Other"]:
+        true_choices = _get_positive_choices_by_label(Label.OTHER)
+    else:
+        true_choices = _get_negative_choices_by_label(Label.OTHER)
+    return process_results_mcq(doc, results, true_choices)
