@@ -62,12 +62,9 @@ def process_results_mcq(doc, results, true_choices):
     results = [result[0] for result in results]
 
     acc = 1.0 if int(np.argmax(results)) in true_choices else 0.0
-    completion_len = np.array([float(len(i)) for i in doc["choices"]])
-    acc_norm = 1.0 if int(np.argmax(results / completion_len)) in true_choices else 0.0
 
     return {
         "acc": acc,
-        "acc_norm": acc_norm,
     }
 
 def _get_positive_choices_by_label(label: Label) -> list[int]:
