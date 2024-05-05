@@ -19,7 +19,7 @@ national objectives and actions, rather than referring to a collective regional 
 3. \"Other\" = those that do not fit into the Reduction or Net Zero category but satisfy our definition of a target, e.g. renewable energy targets.\
 \n\n"
 
-doc_to_text: "The given paragraph:\n{{text}}\n\nThis is a multiple-choice quesion that has \
+doc_to_text: "The given paragraph:\n{{text}}\n\nThis is a multiple-choice question that has \
 to be answered with a letter of the corresponding answer option. \
 What climate targets are mentioned in the given paragraph?\n{{enumerated_choices}}\n\nAnswer:"
 doc_to_target: -1 # doc_to_target is not used because the results are evaluated by process_results
