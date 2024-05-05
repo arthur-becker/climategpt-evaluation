@@ -3,20 +3,19 @@ import numpy as np
 from enum import Enum
 
 class Label(Enum):
-    REDUCTION = 0
-    NET_ZERO = 1
-    OTHER = 2
+    REDUCTION = "Reduction"
+    NET_ZERO = "Net zero"
+    OTHER = "Other"
 
-# TODO: replace choices with single letter
 _CHOICES = {
-  'None': [], # 0
-  'Reduction' : [Label.REDUCTION], # 1
-  'Net zero' : [Label.NET_ZERO], # 2
-  'Other' : [Label.OTHER], # 3
-  'Reduction, Net zero' : [Label.REDUCTION, Label.NET_ZERO], # 4
-  'Reduction, Other' : [Label.REDUCTION, Label.OTHER], # 5
-  'Net zero, Other' : [Label.NET_ZERO, Label.OTHER], # 6
-  'Reduction, Net zero, Other' : [Label.REDUCTION, Label.NET_ZERO, Label.OTHER] # 7
+  'A': [], # 0
+  'B' : [Label.REDUCTION], # 1
+  'C' : [Label.NET_ZERO], # 2
+  'D' : [Label.OTHER], # 3
+  'E' : [Label.REDUCTION, Label.NET_ZERO], # 4
+  'F' : [Label.REDUCTION, Label.OTHER], # 5
+  'G' : [Label.NET_ZERO, Label.OTHER], # 6
+  'H' : [Label.REDUCTION, Label.NET_ZERO, Label.OTHER] # 7
 }
 
 
@@ -26,10 +25,30 @@ _CHOICES = {
 def _get_choices():
     return list(_CHOICES.keys())
 
+def _get_enumerated_choices():
+    text = ""
+
+    assert len(_CHOICES.keys()) > 0
+
+    for key in _CHOICES.keys():
+        line = f"{key}. "
+        labels : list[Label] = _CHOICES[key]
+        if len(labels) == 0:
+            line += "(none)"
+        else:
+            for i in range(len(labels)):
+                label = labels[i]
+                line += label.value
+                if i + 1 < len(labels):
+                    line += ", "
+        text += line + "\n"
+    return text
+
 def process_docs(dataset: datasets.Dataset) -> datasets.Dataset:
     def _process_doc(doc):
         output = {
             'choices': _get_choices(),
+            'enumerated_choices': _get_enumerated_choices()
         }
         return output
 
