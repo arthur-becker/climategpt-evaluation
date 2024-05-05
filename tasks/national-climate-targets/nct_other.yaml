@@ -1,0 +1,3 @@
+include: _template.yaml
+task: nct_other
+process_results: !function utils.evaluate_other_label

@@ -1,0 +1,3 @@
+include: _template.yaml
+task: nct_reduction
+process_results: !function utils.evaluate_reduction_label

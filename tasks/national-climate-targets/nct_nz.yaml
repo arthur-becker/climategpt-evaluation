@@ -1,0 +1,3 @@
+include: _template.yaml
+task: nct_nz # nz = net zero
+process_results: !function utils.evaluate_nz_label

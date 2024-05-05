@@ -1,6 +1,5 @@
 group:
   - climabench
-task: nct # = National Climate Targets
 dataset_path: ClimatePolicyRadar/national-climate-targets
 dataset_name: null
 dataset_kwargs: null
@@ -16,4 +15,3 @@ doc_to_text: "Add none, one or more suitable tags to the following text:\n{{text
 doc_to_target: -1 # doc_to_target is not used because the results are evaluated by process_results
 doc_to_choice: choices
 output_type: multiple_choice
-process_results: !function utils.process_results_total
