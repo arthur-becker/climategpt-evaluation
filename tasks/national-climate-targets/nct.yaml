@@ -1,6 +1,5 @@
 group: nct # = national climate targets
 task:
-  - nct_multilabel
   - nct_reduction
   - nct_nz
   - nct_other

@@ -1,5 +1,0 @@
-include: _template.yaml
-task: nct_multilabel
-process_results: !function utils.evaluate_multilabel
-metric_list:
-  - metric: acc

@@ -1,3 +1,8 @@
 include: _template.yaml
 task: nct_reduction
-process_results: !function utils.evaluate_reduction_label
+process_docs: !function utils.process_docs_reduction
+doc_to_text: "The given paragraph:\n{{text}}\n\n\
+Should the given paragraph be classified as \"Reduction\"?\n\
+A. No\n\
+B. Yes\n\
+\n\nAnswer:"

@@ -7,7 +7,6 @@ training_split: train
 validation_split: train
 fewshot_split: train
 # TODO: if the variant with few-shot learning works better, a separate fewshot_split is needed
-process_docs: !function utils.process_docs
 
 # The first paragraph is cited from https://arxiv.org/pdf/2404.02822. The second paragraph is from https://huggingface.co/datasets/ClimatePolicyRadar/national-climate-targets
 description: "We assign the target types \
@@ -16,24 +15,22 @@ satisfies three criteria: it (1) contains an aim to achieve a specific outcome, 
 (3) has been given a deadline. We consider targets set by governments focusing on their specific \
 national objectives and actions, rather than referring to a collective regional or global goal. \
 \n
-Detailed descriptions of the labels:\n\
+Detailed descriptions of the targets/labels:\n\
 1. \"Reduction\" = a target referring to a reduction in greenhouse gas emissions, either economy-wide or for a sector.\n\
 2. \"Net zero\" = a commitment to balance Greenhouse Gas emissions with removal, effectively reducing the net emissions to zero.\n\
 3. \"Other\" = those that do not fit into the Reduction or Net Zero category but satisfy our definition of a target, e.g. renewable energy targets.\n\n\
 
-These are multiple-choice questions. You need to assign the correct labels to the given paragraphs by choosing an option representing these labels.\
-\n\n\n#########################################\n\n\n"
+You need to identify if a given paragraph mentions the specified target type in the settings of multiple-choice questions. \
+\n\n\n#########################################\n\n\n\n"
 
 num_fewshot: 0
 fewshot_delimiter: "\n\n\n#########################################\n\n\n\n"
 
-doc_to_text: "The given paragraph:\n{{text}}\n\nThis is a multiple-choice question that has \
-to be answered with a letter of the corresponding answer option. \
-What climate targets are mentioned in the given paragraph?\n{{enumerated_choices}}\n\nAnswer:"
 doc_to_target: label # doc_to_target is not used in the evaluation, but used for the few-shot demonstrationbecause
-doc_to_choice: choices
+doc_to_choice: ["A", "B"]
 output_type: multiple_choice
 
+process_results: !function utils.process_results_mcq
 metric_list:
   - metric: acc
   - metric: precision
