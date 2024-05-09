@@ -88,4 +88,4 @@ def f1_aggr(items):
     if precision + recall == 0:
         return -1
     else:
-        return 1.0 * precision * recall / (precision + recall)
+        return 2.0 * precision * recall / (precision + recall)
