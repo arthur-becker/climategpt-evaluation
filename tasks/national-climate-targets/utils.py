@@ -46,9 +46,20 @@ def _get_enumerated_choices():
 
 def process_docs(dataset: datasets.Dataset) -> datasets.Dataset:
     def _process_doc(doc):
+        labels = []
+        if doc["annotation_Reduction"]:
+            labels.append(Label.REDUCTION)
+        if doc["annotation_NZT"]:
+            labels.append(Label.NET_ZERO)
+        if doc["annotation_Other"]:
+            labels.append(Label.OTHER)
+
+        choice_index = _labels_to_choice(labels)
+
         output = {
             'choices': _get_choices(),
-            'enumerated_choices': _get_enumerated_choices()
+            'enumerated_choices': _get_enumerated_choices(),
+            'label': choice_index
         }
         return output
 
