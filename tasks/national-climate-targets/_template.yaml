@@ -25,3 +25,15 @@ What climate targets are mentioned in the given paragraph?\n{{enumerated_choices
 doc_to_target: -1 # doc_to_target is not used because the results are evaluated by process_results
 doc_to_choice: choices
 output_type: multiple_choice
+
+metric_list:
+  - metric: acc
+  - metric: precision
+    aggregation: !function utils.precision_aggr
+    higher_is_better: true
+  - metric: recall
+    aggregation: !function utils.recall_aggr
+    higher_is_better: true
+  - metric: f1
+    aggregation: !function utils.f1_aggr
+    higher_is_better: true

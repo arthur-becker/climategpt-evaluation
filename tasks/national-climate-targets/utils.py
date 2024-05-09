@@ -58,14 +58,32 @@ def process_docs(dataset: datasets.Dataset) -> datasets.Dataset:
 
 # POST-PROCESSING
 
-def process_results_mcq(doc, results, true_choices):
+def process_results_mcq(doc, results, true_choices, is_ref_positive = None):
     results = [result[0] for result in results]
 
-    acc = 1.0 if int(np.argmax(results)) in true_choices else 0.0
+    chosen = int(np.argmax(results))
+    acc = 1.0 if chosen in true_choices else 0.0
 
-    return {
-        "acc": acc,
-    }
+    ref = 1 if is_ref_positive else 0
+    pred = None
+    if (chosen in true_choices) and is_ref_positive:
+        pred = 1
+    elif (chosen not in true_choices) and (not is_ref_positive):
+        pred = 1
+    else:
+        pred = 0
+
+    if is_ref_positive is None:
+        return {
+            "acc": acc
+        }
+    else:
+        return {
+            "acc": acc,
+            "precision": (pred, ref),
+            "recall": (pred, ref),
+            "f1": (pred, ref)
+        }
 
 def _get_positive_choices_by_label(label: Label) -> list[int]:
     """
@@ -114,24 +132,63 @@ def evaluate_multilabel(doc, results):
 
 def evaluate_reduction_label(doc, results):
     true_choices = None
+    ref = False
     if doc["annotation_Reduction"]:
+        ref = True
         true_choices = _get_positive_choices_by_label(Label.REDUCTION)
     else:
         true_choices = _get_negative_choices_by_label(Label.REDUCTION)
-    return process_results_mcq(doc, results, true_choices)
+    return process_results_mcq(doc, results, true_choices, is_ref_positive=ref)
 
 def evaluate_nz_label(doc, results):
     true_choices = None
+    ref = False
     if doc["annotation_NZT"]:
+        ref = True
         true_choices = _get_positive_choices_by_label(Label.NET_ZERO)
     else:
         true_choices = _get_negative_choices_by_label(Label.NET_ZERO)
-    return process_results_mcq(doc, results, true_choices)
+    return process_results_mcq(doc, results, true_choices, is_ref_positive=ref)
 
 def evaluate_other_label(doc, results):
     true_choices = None
+    ref = False
     if doc["annotation_Other"]:
+        ref = True
         true_choices = _get_positive_choices_by_label(Label.OTHER)
     else:
         true_choices = _get_negative_choices_by_label(Label.OTHER)
-    return process_results_mcq(doc, results, true_choices)
+    return process_results_mcq(doc, results, true_choices, is_ref_positive=ref)
+
+# METRICS
+
+def get_confusion_matrix(items):
+    true_negatives = sum([int(x == (0,0)) for x in items])
+    true_positives = sum([int(x == (1,1)) for x in items])
+    false_positives = sum([int(x == (1,0)) for x in items])
+    false_negatives = sum([int(x == (0,1)) for x in items])
+
+    return true_positives, true_negatives, false_positives, false_negatives
+
+
+def precision_aggr(items):
+    tp, tn, fp, fn = get_confusion_matrix(items)
+    if tp + fp == 0:
+        return -1
+    else:
+        return 1.0 * tp / (tp + fp)
+
+def recall_aggr(items):
+    tp, tn, fp, fn = get_confusion_matrix(items)
+    if tp + fn == 0:
+        return -1
+    else:
+        return 1.0 * tp / (tp + fn)
+
+def f1_aggr(items):
+    precision = precision_aggr(items)
+    recall = recall_aggr(items)
+    if precision + recall == 0:
+        return -1
+    else:
+        return 1.0 * precision * recall / (precision + recall)
