@@ -5,8 +5,6 @@ dataset_name: null
 dataset_kwargs: null
 training_split: train
 validation_split: train
-fewshot_split: train
-# TODO: if the variant with few-shot learning works better, a separate fewshot_split is needed
 
 # The first paragraph is cited from https://arxiv.org/pdf/2404.02822. The second paragraph is from https://huggingface.co/datasets/ClimatePolicyRadar/national-climate-targets
 description: "We assign the target types \
@@ -20,13 +18,9 @@ Detailed descriptions of the targets/labels:\n\
 2. \"Net zero\" = a commitment to balance Greenhouse Gas emissions with removal, effectively reducing the net emissions to zero.\n\
 3. \"Other\" = those that do not fit into the Reduction or Net Zero category but satisfy our definition of a target, e.g. renewable energy targets.\n\n\
 
-You need to identify if a given paragraph mentions the specified target type in the settings of multiple-choice questions. \
-\n\n\n#########################################\n\n\n\n"
+You need to identify if a given paragraph mentions the specified target type in the settings of multiple-choice questions."
 
-num_fewshot: 0
-fewshot_delimiter: "\n\n\n#########################################\n\n\n\n"
-
-doc_to_target: label # doc_to_target is not used in the evaluation, but used for the few-shot demonstrationbecause
+doc_to_target: label
 doc_to_choice: ["A", "B"]
 output_type: multiple_choice
 

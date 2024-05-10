@@ -1,8 +1,4 @@
 include: _template.yaml
 task: nct_other
 process_docs: !function utils.process_docs_other
-doc_to_text: "The given paragraph:\n{{text}}\n\n\
-Should the given paragraph be classified as \"Other\"?\n\
-A. No\n\
-B. Yes\n\
-\n\nAnswer:"
+doc_to_text: question_text
