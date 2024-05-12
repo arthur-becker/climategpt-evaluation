@@ -6,19 +6,7 @@ dataset_kwargs: null
 training_split: train
 validation_split: train
 
-# The first paragraph is cited from https://arxiv.org/pdf/2404.02822. The second paragraph is from https://huggingface.co/datasets/ClimatePolicyRadar/national-climate-targets
-description: "We assign the target types \
-\"Net Zero\", \"Reduction\" or \"Other\" to paragraphs in a multi-label classification setting. A target \
-satisfies three criteria: it (1) contains an aim to achieve a specific outcome, (2) is quantifiable, and \
-(3) has been given a deadline. We consider targets set by governments focusing on their specific \
-national objectives and actions, rather than referring to a collective regional or global goal. \
-\n
-Detailed descriptions of the targets/labels:\n\
-1. \"Reduction\" = a target referring to a reduction in greenhouse gas emissions, either economy-wide or for a sector.\n\
-2. \"Net zero\" = a commitment to balance Greenhouse Gas emissions with removal, effectively reducing the net emissions to zero.\n\
-3. \"Other\" = those that do not fit into the Reduction or Net Zero category but satisfy our definition of a target, e.g. renewable energy targets.\n\n\
-
-You need to identify if a given paragraph mentions the specified target type in the settings of multiple-choice questions."
+description: "{{description}}"
 
 doc_to_target: label
 doc_to_choice: ["A", "B"]

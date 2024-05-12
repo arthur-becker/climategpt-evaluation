@@ -8,6 +8,21 @@ class Label(Enum):
     NET_ZERO = "Net zero"
     OTHER = "Other"
 
+DESCRIPTION = """\
+"We assign the target types \
+"Net Zero\", \"Reduction\" or \"Other\" to paragraphs in a multi-label classification setting. A target \
+satisfies three criteria: it (1) contains an aim to achieve a specific outcome, (2) is quantifiable, and \
+(3) has been given a deadline. We consider targets set by governments focusing on their specific \
+national objectives and actions, rather than referring to a collective regional or global goal. \
+
+Detailed descriptions of the targets/labels:
+1. \"Reduction\" = a target referring to a reduction in greenhouse gas emissions, either economy-wide or for a sector.
+2. \"Net zero\" = a commitment to balance Greenhouse Gas emissions with removal, effectively reducing the net emissions to zero.
+3. \"Other\" = those that do not fit into the Reduction or Net Zero category but satisfy our definition of a target, e.g. renewable energy targets.
+
+You need to identify if a given paragraph mentions the specified target type in the settings of multiple-choice questions."
+"""
+
 
 # PRE-PROCESSING
 
@@ -96,6 +111,7 @@ def _process_docs(dataset: datasets.Dataset, target_type: Label) -> datasets.Dat
 
         # Add new fields
         output = {
+            'description': DESCRIPTION,
             'question_text': question_text,
             'label': _get_label(doc, target_type)
         }
