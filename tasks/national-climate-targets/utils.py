@@ -94,7 +94,7 @@ def _question_template(doc, target_type: Label, show_answer=False):
     return f"""
 \n\n\n#########################################\n\n\n
 The given paragraph:\n{doc["text"]}\n\n
-Should the given paragraph be classified as \"Net zero\"?
+Should the given paragraph be classified as \"{target_type.value}\"?
 A. No
 B. Yes
 \n\nAnswer:{" " + ["A","B"][label] if show_answer else ""}"""
