@@ -31,15 +31,15 @@ def power_set(iterable):
     s = list(iterable)
     return list(itertools.chain.from_iterable(itertools.combinations(s, r) for r in range(len(s)+1)))
 
-def _get_few_shots(dataset : datasets.Dataset):
+def _get_few_shots(dataset : datasets.Dataset, target_type: Label):
     """
     The dataset is very imbalanced, and the first several examples represent the same
     classes which makes the standard few-shot implementation of LM Evaluation Harness
     unsuitable. Therefore, this function implements the search for own few-shot examples
     with the following requirements:
-    1. There have to be exactly 8 examples covering each class in the multi-label
-        setting with 3 binary labels.
-    2. For each class, a second example is also drawn in order to be used when the first example is used
+    1. Two cases should be covered: examples labeled with `target_type` and examples labeled without it.
+    2. Every case should have at least 2 examples: both labeled with another label and not having any other label.
+    3. For each of these four classes, a second example is also drawn in order to be used when the first example is used
         as the main question.
 
     Args:
@@ -50,7 +50,8 @@ def _get_few_shots(dataset : datasets.Dataset):
     """
     NUM_EXAMPLES_PER_CLASS = 2
 
-    data_classes = power_set([Label.REDUCTION, Label.NET_ZERO, Label.OTHER])
+    not_target_types = set(Label.__members__.values()) - set([target_type])
+    data_classes = power_set([target_type, not_target_types.pop()])
     few_shots_dict = {}
     for labels in data_classes:
         few_shots_dict[labels] = []
@@ -99,7 +100,7 @@ B. Yes
 \n\nAnswer:{" " + ["A","B"][label] if show_answer else ""}"""
 
 def _process_docs(dataset: datasets.Dataset, target_type: Label) -> datasets.Dataset:
-    few_shots = _get_few_shots(dataset)
+    few_shots = _get_few_shots(dataset, target_type)
 
     def _process_doc(doc):
         # Concatenate few-shot examples and the question
