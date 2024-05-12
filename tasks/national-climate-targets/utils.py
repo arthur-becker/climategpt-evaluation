@@ -9,7 +9,7 @@ class Label(Enum):
     OTHER = "Other"
 
 DESCRIPTION = """\
-"We assign the target types \
+We assign the target types \
 "Net Zero\", \"Reduction\" or \"Other\" to paragraphs in a multi-label classification setting. A target \
 satisfies three criteria: it (1) contains an aim to achieve a specific outcome, (2) is quantifiable, and \
 (3) has been given a deadline. We consider targets set by governments focusing on their specific \
