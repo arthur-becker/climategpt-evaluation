@@ -17,10 +17,7 @@ There are three types of climate targets:
 2. "Net zero": a commitment to balance Greenhouse Gas emissions with removal, effectively reducing the net emissions to zero.
 3. "Other": those that do not fit into the Reduction or Net Zero category but satisfy our definition of a target, e.g. renewable energy targets.
 
-If a given paragraph mentions a specific climate target, it is classified accordingly. For example, if a paragraph mentions a target "Net zero",\
-then this paragraph is classified as "Net zero". If a paragraph mentions multiple different targets, it is classified into multiple classes.
-
-The following are multiple choice questions (with answers) about the classification of the given paragraphs.\
+The following are multiple choice questions (with answers).\
 """
 
 
@@ -94,7 +91,7 @@ def _question_template(doc, target_type: Label, show_answer=False):
     return f"""
 \n\n\n#########################################\n\n\n
 The given paragraph:\n{doc["text"]}\n\n
-Should the given paragraph be classified as \"{target_type.value}\"?
+Does the given paragraph contain the climate target \"{target_type.value}\"?
 A. No
 B. Yes
 \n\nAnswer:{" " + ["A","B"][label] if show_answer else ""}"""
